@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataTables.js</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- DataTable -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container my-4">
+        <div class="row mb-3">
+            <div class="col text-center d-grid ">
+              <button class="btn btn-outline-danger custom-btn" data-bs-toggle="modal" data-bs-target="#exampleModal" type="button">Agregar Medicamento</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <table id="datatable_users" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="centered">#</th>
+                            <th class="centered">Nombre</th>
+                            <th class="centered">Fecha Expiracion</th>
+                            <th class="centered">Cantidad</th>
+                            <th class="centered">Donado</th>
+                            <th class="centered">Fecha Donacion</th>
+                            <th class="centered">Options</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody_users"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Nuevo medicamento</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label for="recipient-name" class="col-form-label">Nombre:</label>
+                  <input type="text" class="form-control" id="addNombreMed">
+                </div>
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Fecha Expiracion:</label>
+                  <input type="date" class="form-control" id="addfechaExpiracion">
+                </div>
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Cantidad:</label>
+                  <input type="number" class="form-control" id="addcantidad">
+                </div>
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Donado:</label>
+                  <select class="form-select" id="adddonado">
+                    <option value="si">Sí</option>
+                    <option value="no">No</option>
+                </select>                
+              </div>
+                <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Fecha Donado:</label>
+                  <input type="date" class="form-control" id="addfechaDonacion">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button> -->
+              <button type="button" onclick="guardarMedicamento()" class="btn btn-primary">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+    <div class="modal fade" id="modal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Editar medicamento</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                  <label for="recipient-name" class="col-form-label">Nombre</label>
+                  <input type="text" class="form-control" id="recipientName">
+              </div>
+              <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Fecha Expiracion</label>
+                  <input type="date" class="form-control" id="fechaExpiracion">
+              </div>
+              <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Cantidad</label>
+                  <input type="number" class="form-control" id="cantidad">
+              </div>
+              <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Donado</label>
+                  <select class="form-select" id="donado">
+                      <option value="si">Sí</option>
+                      <option value="no">No</option>
+                  </select>
+              </div>
+              <div class="mb-3">
+                  <label for="message-text" class="col-form-label">Fecha Donacion</label>
+                  <input type="date" class="form-control" id="fechaDonacion">
+              </div>
+          </form>
+          
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="actualizarMedic" class="btn btn-primary">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- DataTable -->
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.min.js"></script>
+    <!-- Custom JS -->
+    <script src="main.mjs"></script>
+
+
+    <script>
+           
+      const updateDataTable = async () => {
+    try {
+        const response = await fetch("/obtenerMedicamentos");
+        const datos = await response.json();
+
+        dataTable.clear().draw(); // Limpiar la tabla antes de agregar los nuevos datos
+
+        datos.forEach((data, index) => {
+            dataTable.row.add([
+                data.ID,
+                data.NombreMedicamento,
+                data.FechaExpiracion != null ? moment(data.FechaExpiracion).format("YYYY-MM-DD") : 'Sin fecha',
+                data.CantidadTabletas,
+                data.Donado == 1 ? 'Si' : 'No',
+                data.FechaDonacion != null ? moment(data.FechaDonacion).format("YYYY-MM-DD") : 'Sin fecha',
+                `<button class="btn btn-sm btn-primary" onclick="editarMedicamento(${data.ID},'${data.NombreMedicamento}','${data.FechaExpiracion}','${data.CantidadTabletas}','${data.Donado}','${data.FechaDonacion}')"><i class="fa-solid fa-pencil"></i></button>
+                <button class="btn btn-sm btn-danger" onclick="eliminarMedicamento(${data.ID})"><i class="fa-solid fa-trash-can"></i></button>`
+            ]).draw(false); // Agregar nueva fila a la tabla sin redibujar la tabla completa
+        });
+
+        Swal.fire({
+            title: "Éxito",
+            text: "Los datos de la tabla se han actualizado correctamente",
+            icon: "success"
+        });
+    } catch (error) {
+        console.error("Error al actualizar la tabla:", error);
+        Swal.fire({
+            title: "Error",
+            text: "Se ha producido un error al actualizar la tabla",
+            icon: "error"
+        });
+    }
+};
+
+
+      const guardarMedicamento = async () =>{
+        console.log($('#addNombreMed').val());
+        console.log($('#addfechaExpiracion').val());
+        console.log($('#addcantidad').val());
+        console.log($('#adddonado').val());
+        console.log($('#addfechaDonacion').val());
+
+        const datos = {
+              nombre : $('#addNombreMed').val(),
+              fechaExpi : $('#addfechaExpiracion').val(),
+              cant : $('#addcantidad').val(),
+              donado : $('#adddonado').val(),
+              fechaDon:$('#addfechaDonacion').val()
+          };
+
+        const options = {
+              method: 'POST', // Método de la solicitud
+              headers: {
+                  'Content-Type': 'application/json' // Tipo de contenido del cuerpo de la solicitud
+              },
+              body: JSON.stringify(datos) // Convierte los datos a formato JSON y los asigna al cuerpo de la solicitud
+          };
+
+          try {
+            const response = await fetch("/guardarMedicNew", options);
+            if (response.status) { // Verifica si la respuesta es exitosa (código de estado 200-299)
+                const data = await response.json(); // Convierte la respuesta a JSON
+                // Trabaja con los datos de la respuesta aquí
+                const respuesta = {
+                    status: 'success',
+                    data: data
+                };
+
+              $('#exampleModal').modal('hide');
+              $('#addNombreMed').val(''),
+              $('#addfechaExpiracion').val(''),
+              $('#addcantidad').val(''),
+              $('#adddonado').val(''),
+              $('#addfechaDonacion').val('')
+              initDataTable();
+                Swal.fire({
+                  title: "Exitoso",
+                  text: "Se guardo con exito!!!",
+                  icon: "success"
+                });
+
+
+            } else {
+                // Maneja el caso en que la respuesta no sea exitosa
+                const errorResponse = {
+                    status: 'error',
+                    message: response.statusText
+                };
+                console.error(errorResponse);
+            }
+          } catch (error) {
+            // Maneja errores de red u otros errores relacionados con la solicitud
+            const errorResponse = {
+                status: 'error',
+                message: error.message
+            };
+            console.error(errorResponse);
+          }
+
+      }
+
+
+      const  editarMedicamento = (id , nombre , fExpi , cant, donado , fecDonado)=> {
+        $('#recipientName').val(nombre);
+        const fechaFormateada = moment(fExpi).format("YYYY-MM-DD");
+
+        $('#fechaExpiracion').val(fechaFormateada);
+        $('#cantidad').val(cant);
+        $('#donado').val( donado == 1 ? 'si' : 'no');
+        const fechaFormateada2 = moment(fecDonado).format("YYYY-MM-DD");
+        $('#fechaDonacion').val(fechaFormateada2);
+
+        $('#modal2').modal('show');
+
+        const botonGuardar = document.getElementById('actualizarMedic');
+
+
+        botonGuardar.addEventListener('click', async function() {
+          console.log("boton de actualizar presionado.")
+          const datos = {
+              id : id , 
+              nombre : $('#recipientName').val(),
+              fechaExpi : $('#fechaExpiracion').val(),
+              cant : $('#cantidad').val(),
+              donado : $('#donado').val(),
+              fechaDon:$('#fechaDonacion').val()
+          };
+
+          const options = {
+              method: 'PUT', // Método de la solicitud
+              headers: {
+                  'Content-Type': 'application/json' // Tipo de contenido del cuerpo de la solicitud
+              },
+              body: JSON.stringify(datos) // Convierte los datos a formato JSON y los asigna al cuerpo de la solicitud
+          };
+
+          try {
+            const response = await fetch("/editarMedicamentos", options);
+            if (response.status) { // Verifica si la respuesta es exitosa (código de estado 200-299)
+                const data = await response.json(); // Convierte la respuesta a JSON
+                // Trabaja con los datos de la respuesta aquí
+                const respuesta = {
+                    status: 'success',
+                    data: data
+                };
+                $('#modal2').modal('hide');
+
+                await updateDataTable();
+
+                Swal.fire({
+                  title: "Exitoso",
+                  text: "Actualizado",
+                  icon: "success"
+                });
+
+
+            } else {
+                // Maneja el caso en que la respuesta no sea exitosa
+                const errorResponse = {
+                    status: 'error',
+                    message: response.statusText
+                };
+                console.error(errorResponse);
+            }
+          } catch (error) {
+            // Maneja errores de red u otros errores relacionados con la solicitud
+            const errorResponse = {
+                status: 'error',
+                message: error.message
+            };
+            console.error(errorResponse);
+          }
+
+        });
+
+      }
+
+
+      const eliminarMedicamento = async (id) =>{
+        Swal.fire({
+          title: "Quieres eliminarlo?",
+          text: "Si se borra , no podras recuperarlo.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Si, hazlo!"
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+              const datos = {
+                id : id
+              };
+
+              const options = {
+              method: 'DELETE', // Método de la solicitud
+              headers: {
+                  'Content-Type': 'application/json' // Tipo de contenido del cuerpo de la solicitud
+              },
+              body: JSON.stringify(datos) // Convierte los datos a formato JSON y los asigna al cuerpo de la solicitud
+          };
+
+              try {
+                const response = await fetch("/eliminarForId", options);
+                if (response.status) { // Verifica si la respuesta es exitosa (código de estado 200-299)
+                    const data = await response.json(); // Convierte la respuesta a JSON
+                    // Trabaja con los datos de la respuesta aquí
+                    const respuesta = {
+                        status: 'success',
+                        data: data
+                    };
+
+                  
+                   await updateDataTable();
+                    
+                    Swal.fire({
+                      title: "Exitoso",
+                      text: "Se elimino con exito!!!",
+                      icon: "success"
+                    });
+
+                } else {
+                    // Maneja el caso en que la respuesta no sea exitosa
+                    const errorResponse = {
+                        status: 'error',
+                        message: response.statusText
+                    };
+                    console.error(errorResponse);
+                }
+              } catch (error) {
+                // Maneja errores de red u otros errores relacionados con la solicitud
+                const errorResponse = {
+                    status: 'error',
+                    message: error.message
+                };
+                console.error(errorResponse);
+              }
+          }
+        });
+      }
+
+     
+
+
+    </script>
+</body>
+</html>
